@@ -6,6 +6,11 @@ function App() {
   const [alreadyClicked, setAlreadyClicked] = useState([]);
   const [highscore, setHighscore] = useState(0);
 
+  let score = alreadyClicked.length;
+  if (score > highscore) {
+    setHighscore(score);
+  }
+
   const characters = [
     "Ambessa",
     "Caitlyn",
@@ -20,16 +25,6 @@ function App() {
     "Viktor",
   ];
 
-  let score = alreadyClicked.length;
-  if (score > highscore) {
-    setHighscore(score);
-  }
-
-  let order = [...Array(characters.length).keys()]
-    .map((value) => ({ value, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ value }) => value);
-
   const characterCards = characters.map((name) => (
     <CharacterCard
       key={name}
@@ -38,13 +33,15 @@ function App() {
     />
   ));
 
+  let order = [...Array(characters.length).keys()]
+    .map((value) => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
+
   function handleCardClick(name) {
-    if (alreadyClicked.indexOf(name) !== -1) {
-      setAlreadyClicked([]);
-    } else {
-      let newArray = alreadyClicked.concat([name]);
-      setAlreadyClicked(newArray);
-    }
+    alreadyClicked.indexOf(name) === -1
+      ? setAlreadyClicked(alreadyClicked.concat([name]))
+      : setAlreadyClicked([]);
   }
 
   return (
